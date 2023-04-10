@@ -55,7 +55,7 @@ app.use(
 app.use(
   cors({
     credentials: true,
-    origin: process.env.ORIGIN,
+    origin: "https://maziero681.com",
   })
 );
 
