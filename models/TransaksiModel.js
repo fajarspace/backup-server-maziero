@@ -19,7 +19,7 @@ const TransaksiModel = db.define(
       allowNull: false,
     },
     jumlah: {
-      type: Sequelize.FLOAT,
+      type: Sequelize.INTEGER,
       allowNull: false,
     },
     tipe: {

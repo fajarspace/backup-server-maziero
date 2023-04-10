@@ -1,13 +1,13 @@
 const express = require("express");
 const {
   getAllBlog,
-  getBlogByJudul,
+  getBlogByJudulUrl,
   getBlogById,
   createBlog,
   updateBlog,
   deleteBlog,
 } = require("../controllers/BlogController.js");
-const { verifyUser, adminOnly } = require("../middleware/AuthUser.js");
+const { verifyUser } = require("../middleware/AuthUser.js");
 
 const router = express.Router();
 
@@ -24,7 +24,7 @@ router.get("/blogs", getAllBlog);
 router.get("/blogs/:id", getBlogById);
 
 // READ - GET by id
-router.get("/blog/:id", getBlogByJudul);
+router.get("/blog/:judulUrl", getBlogByJudulUrl);
 
 // UPDATE - PATCH
 router.patch("/blogs/:id", verifyUser, updateBlog);

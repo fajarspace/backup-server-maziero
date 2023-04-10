@@ -19,8 +19,8 @@ const createGaleri = (req, res) => {
   if (!allowedType.includes(ext.toLowerCase())) {
     return res.status(422).json({ msg: "Invalid Images" });
   }
-  if (fileSize > 5000000) {
-    return res.status(422).json({ msg: "Image must be less than 5 MB" });
+  if (fileSize > 10000000) {
+    return res.status(422).json({ msg: "Image must be less than 10 MB" });
   }
 
   file.mv(`./public/galeri/${fileName}`, async (err) => {
@@ -58,23 +58,6 @@ const getAllGaleri = async (req, res) => {
   }
 };
 
-const searchGaleri = async (req, res, next) => {
-  const searchTerm = req.query.q;
-  try {
-    const posts = await GaleriModel.findAll({
-      where: {
-        [Op.or]: [
-          { judul: { [Op.substring]: searchTerm } },
-          { deskripsi: { [Op.substring]: searchTerm } },
-        ],
-      },
-    });
-    res.json(posts);
-  } catch (err) {
-    next(err);
-  }
-};
-
 const getGaleriById = async (req, res) => {
   try {
     const response = await GaleriModel.findOne({
@@ -94,8 +77,6 @@ const getGaleriById = async (req, res) => {
     res.status(500).json({ msg: error.message });
   }
 };
-
-("sequelize");
 
 const updateGaleri = async function (req, res) {
   const galeri = await GaleriModel.findOne({
@@ -117,8 +98,8 @@ const updateGaleri = async function (req, res) {
 
     if (!allowedType.includes(ext.toLowerCase()))
       return res.status(422).json({ msg: "Invalid Images" });
-    if (fileSize > 5000000)
-      return res.status(422).json({ msg: "Image must be less than 5 MB" });
+    if (fileSize > 10000000)
+      return res.status(422).json({ msg: "Image must be less than 10 MB" });
 
     const filepath = `./public/galeri/${galeri.gambar}`;
     fs.unlinkSync(filepath);

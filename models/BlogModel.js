@@ -18,6 +18,10 @@ const BlogModel = db.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    judulUrl: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     konten: {
       type: DataTypes.TEXT,
     },

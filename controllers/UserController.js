@@ -1,5 +1,5 @@
 const UserModel = require("../models/UserModel");
-const argon2 = require("argon2");
+const bcrypt = require("bcryptjs");
 
 const getUser = async (req, res) => {
   try {
@@ -32,7 +32,7 @@ const createUser = async (req, res) => {
     return res
       .status(400)
       .json({ msg: "Password dan Confirm Password tidak cocok" });
-  const hashPassword = await argon2.hash(password);
+  const hashPassword = await bcrypt.hash(password, 10);
   try {
     await UserModel.create({
       nama: nama,
@@ -58,7 +58,7 @@ const updateUser = async (req, res) => {
   if (password === "" || password === null) {
     hashPassword = user.password;
   } else {
-    hashPassword = await argon2.hash(password);
+    hashPassword = await bcrypt.hash(password, 10);
   }
   if (password !== konfirmPassword)
     return res

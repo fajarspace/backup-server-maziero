@@ -1,5 +1,3 @@
-"use strict";
-
 const { Op } = require("sequelize");
 const UserModel = require("../models/UserModel.js");
 const TransaksiModel = require("../models/TransaksiModel.js");

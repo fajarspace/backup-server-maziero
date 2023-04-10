@@ -6,7 +6,7 @@ const {
   updateGaleri,
   deleteGaleri,
 } = require("../controllers/GaleriController.js");
-const { verifyUser, adminOnly } = require("../middleware/AuthUser.js");
+const { verifyUser } = require("../middleware/AuthUser.js");
 
 const router = express.Router();
 

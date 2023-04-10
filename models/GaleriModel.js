@@ -23,10 +23,6 @@ const GaleriModel = db.define(
     url: {
       type: DataTypes.STRING,
     },
-    // date: {
-    // type: Sequelize.DATEONLY,
-    // allowNull: false,
-    // },
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,

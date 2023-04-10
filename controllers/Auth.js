@@ -1,5 +1,5 @@
 const UserModel = require("../models/UserModel.js");
-const argon2 = require("argon2");
+const bcrypt = require("bcryptjs");
 
 const Login = async function (req, res) {
   const user = await UserModel.findOne({
@@ -8,7 +8,7 @@ const Login = async function (req, res) {
     },
   });
   if (!user) return res.status(404).json({ msg: "User tidak ditemukan" });
-  const match = await argon2.verify(user.password, req.body.password);
+  const match = await bcrypt.compare(req.body.password, user.password);
   if (!match) return res.status(400).json({ msg: "Password salah! 😠" });
   req.session.userId = user.uuid;
   const uuid = user.uuid;

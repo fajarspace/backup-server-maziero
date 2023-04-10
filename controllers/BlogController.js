@@ -9,7 +9,7 @@ const createBlog = (req, res) => {
   if (req.files === null)
     return res.status(400).json({ msg: "No File Uploaded" });
 
-  const { judul, konten } = req.body;
+  const { judul, judulUrl, konten } = req.body;
   const sanitizedKonten = sanitizeHtml(konten, {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat([
       "h1",
@@ -43,6 +43,7 @@ const createBlog = (req, res) => {
     try {
       await BlogModel.create({
         judul: judul,
+        judulUrl: judulUrl,
         konten: sanitizedKonten,
         gambar: fileName,
         url: url,
@@ -58,7 +59,15 @@ const createBlog = (req, res) => {
 const getAllBlog = async (req, res) => {
   try {
     const response = await BlogModel.findAll({
-      attributes: ["uuid", "gambar", "judul", "konten", "url", "createdAt"],
+      attributes: [
+        "uuid",
+        "gambar",
+        "judul",
+        "judulUrl",
+        "konten",
+        "url",
+        "createdAt",
+      ],
       include: [
         {
           model: UserModel,
@@ -89,12 +98,22 @@ const searchBlog = async (req, res, next) => {
   }
 };
 
-const getBlogByJudul = async (req, res) => {
+const getBlogByJudulUrl = async (req, res) => {
   try {
+    const { judulUrl } = req.params;
+
     const response = await BlogModel.findOne({
-      attributes: ["uuid", "judul", "konten", "gambar", "url", "createdAt"],
+      attributes: [
+        "uuid",
+        "judul",
+        "judulUrl",
+        "konten",
+        "gambar",
+        "url",
+        "createdAt",
+      ],
       where: {
-        judul: req.params.id,
+        judulUrl: req.params.judulUrl,
       },
       include: [
         {
@@ -103,6 +122,13 @@ const getBlogByJudul = async (req, res) => {
         },
       ],
     });
+
+    if (!response) {
+      return res
+        .status(404)
+        .json({ msg: `Blog dengan judul ${judulUrl} tidak ditemukan` });
+    }
+
     res.status(200).json(response);
   } catch (error) {
     res.status(500).json({ msg: error.message });
@@ -112,7 +138,15 @@ const getBlogByJudul = async (req, res) => {
 const getBlogById = async (req, res) => {
   try {
     const response = await BlogModel.findOne({
-      attributes: ["uuid", "judul", "konten", "gambar", "url", "createdAt"],
+      attributes: [
+        "uuid",
+        "judul",
+        "judulUrl",
+        "konten",
+        "gambar",
+        "url",
+        "createdAt",
+      ],
       where: {
         // judul: req.params.judul,
         uuid: req.params.id,
@@ -160,12 +194,18 @@ const updateBlog = async (req, res) => {
       if (err) return res.status(500).json({ msg: err.message });
     });
   }
-  const { judul, konten } = req.body;
+  const { judul, judulUrl, konten } = req.body;
   const url = `${req.protocol}://${req.get("host")}/images/${fileName}`;
 
   try {
     await BlogModel.update(
-      { judul: judul, konten: konten, gambar: fileName, url: url },
+      {
+        judul: judul,
+        judulUrl: judulUrl,
+        konten: konten,
+        gambar: fileName,
+        url: url,
+      },
       {
         where: {
           uuid: req.params.id,
@@ -215,5 +255,5 @@ module.exports = {
   updateBlog,
   deleteBlog,
   searchBlog,
-  getBlogByJudul,
+  getBlogByJudulUrl,
 };
